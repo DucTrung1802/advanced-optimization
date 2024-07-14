@@ -22,7 +22,7 @@ def myGD(x0, eta):
     return x, iter + 1
 
 
-def plot_function_and_path(x, y, x_path):
+def plotFunctionAndPath(x, y, x_path):
     fig, ax = plt.subplots()
     ax.plot(x, y, "b-", label="f(x) = x^2 + 5*sin(x)")
     (current_point,) = ax.plot(
@@ -109,7 +109,7 @@ def main():
 
     x = np.linspace(-10, 10, 400)
     y = x**2 + 5 * np.sin(x)
-    plot_function_and_path(x, y, x_path)
+    plotFunctionAndPath(x, y, x_path)
 
 
 if __name__ == "__main__":
