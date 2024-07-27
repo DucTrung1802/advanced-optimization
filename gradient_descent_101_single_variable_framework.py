@@ -2,29 +2,75 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+# SET UP GRADIENT DESCENT PARAMETERS
+
 
 def cost(x):
+    """Cost function to calculate the cost
+
+    Example:
+
+    f(x) = x**2 + 5 * np.sin(x)
+
+    ∇f(x) = 2 * x + 5 * np.cos(x)
+
+    Args:
+        x (float): input
+
+    Returns:
+        float: f(x)
+    """
     return x**2 + 5 * np.sin(x)
 
 
 def grad(x):
+    """Gradient of the function at x
+
+    Example:
+
+    f(x) = x**2 + 5 * np.sin(x)
+
+    ∇f(x) = 2 * x + 5 * np.cos(x)
+
+    Args:
+        x (float): input
+
+    Returns:
+        float: ∇f(x)
+    """
     return 2 * x + 5 * np.cos(x)
 
 
-def myGD(x0, eta):
+INITIAL_X = 9
+LEARNING_RATE = 0.1
+
+GRAPH_START_X = -10
+GRAPH_END_X = 10
+GRAPH_BINS = 400
+
+GIF_NAME = "animation_101"
+FPS = 5
+
+# CORE FUNCTIONS
+
+
+def iterateGD(x0=0, eta=0.01, max_iter=1000, tolerance=1e-3, grad_clip=1e3):
     x = [x0]
-    for iter in range(100):
-        xNew = x[-1] - eta * grad(x[-1])
-        if abs(grad(xNew)) < 1e-3:
+    for iter in range(max_iter):
+        g = grad(x[-1])
+        if np.abs(g) > grad_clip:
+            g = np.sign(g) * grad_clip  # Clip gradient to avoid overflow
+        xNew = x[-1] - eta * g
+        if abs(g) < tolerance:
             x.append(xNew)
             break
         x.append(xNew)
     return x, iter + 1
 
 
-def plotFunctionAndPath(x, y, x_path):
+def plotFunctionAndPath(x, y, x_path, gif_file_name="animation_101", fps=5):
     fig, ax = plt.subplots()
-    ax.plot(x, y, "b-", label="f(x) = x^2 + 5*sin(x)")
+    ax.plot(x, y, "b-", label="f(x)")
     (current_point,) = ax.plot(
         [], [], "ro", label="Current State", markersize=8, zorder=5
     )
@@ -94,22 +140,22 @@ def plotFunctionAndPath(x, y, x_path):
     ax.legend(loc="best")
     plt.title("Gradient Descent Optimization")
 
-    ani.save("animation_101.gif", writer="imagemagick", fps=5)
+    ani.save(gif_file_name + ".gif", writer="imagemagick", fps=fps)
     plt.show()
 
 
 def main():
-    x0 = 7
-    eta = 0.1
-    x_path, it = myGD(x0, eta)
+    x0 = INITIAL_X
+    eta = LEARNING_RATE
+    x_path, it = iterateGD(x0, eta)
     print(
         "Solution x1 = %f, cost = %f, after %d iterations"
         % (x_path[-1], cost(x_path[-1]), it)
     )
 
-    x = np.linspace(-10, 10, 400)
-    y = x**2 + 5 * np.sin(x)
-    plotFunctionAndPath(x, y, x_path)
+    x = np.linspace(GRAPH_START_X, GRAPH_END_X, GRAPH_BINS)
+    y = cost(x)
+    plotFunctionAndPath(x, y, x_path, GIF_NAME, FPS)
 
 
 if __name__ == "__main__":
