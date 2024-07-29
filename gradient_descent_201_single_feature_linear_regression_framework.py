@@ -64,14 +64,15 @@ class LinearModel:
 def cost(w: np.float64, Xbar: np.ndarray, y: np.ndarray):
     # w has included the bias
     N = Xbar.shape[1]
-    abc = np.linalg.norm(y - Xbar.T.dot(w))
-    return 0.5 / N * np.linalg.norm(y - Xbar.T.dot(w)) ** 2
+    return (
+        0.5 / N * np.linalg.norm(y.reshape(-1, 1) - Xbar.T.dot(w).reshape(-1, 1)) ** 2
+    )
 
 
 def grad(w: np.float64, Xbar: np.ndarray, y: np.ndarray):
     # w has included the bias
     N = Xbar.shape[1]
-    return 1 / N * Xbar.dot(Xbar.T.dot(w) - y)
+    return 1 / N * Xbar.dot(Xbar.T.dot(w).reshape(-1, 1) - y.reshape(-1, 1))
 
 
 def check_grad(fn, gr, X, Xbar, y):
@@ -95,9 +96,8 @@ def check_grad(fn, gr, X, Xbar, y):
         grad_flat[i] = (fp_ - fn_) / (2 * eps)
 
     num_grad = grad_flat.reshape(shape_X)
-    abc = gr(X, Xbar, y)
 
-    diff = np.linalg.norm(num_grad - gr(X, Xbar, y))
+    diff = np.linalg.norm(num_grad.reshape(-1, 1) - gr(X, Xbar, y).reshape(-1, 1))
     print("Difference between two methods should be small:", diff)
 
 
