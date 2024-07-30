@@ -23,22 +23,27 @@ from sklearn.linear_model import LinearRegression
 # SETUP SAMPLE DATA
 
 NUMBER_OF_RECORDS = 1000
-RANGE_OF_NOISE = 0.5
-w0 = 4
-w1 = 3
+RANGE_OF_NOISE = 0.2
+W0 = 10
+W1 = 3
 
 
-# SET UP GRADIENT DESCENT PARAMETERS
+# SETUP GRADIENT DESCENT PARAMETERS
 
-INITIAL_W = np.array([2, 1])
+INITIAL_W = np.array([-2, 1])
 LEARNING_RATE = 1
+
+
+# OTHER SETUP
+
+PDF_FILE_NAME = f"GD_w0_{W0:.3f}_w1_{W1:.3f}"
 
 # =====================================================================
 
 # TRANSFORMATIONS
 X = np.random.rand(NUMBER_OF_RECORDS).reshape(1, -1)
 
-y = w0 + X.T * w1
+y = W0 + X.T * W1
 NOISE = RANGE_OF_NOISE * np.random.randn(NUMBER_OF_RECORDS).reshape(
     NUMBER_OF_RECORDS, 1
 )
@@ -146,6 +151,61 @@ def visualize(X, y, model: LinearModel = None, label=None):
     plt.show()
 
 
+def compute_ellipse_params(X, y):
+    N = X.shape[1]
+    a1 = np.linalg.norm(y, 2) ** 2 / N
+    b1 = 2 * np.sum(X) / N
+    c1 = np.linalg.norm(X, 2) ** 2 / N
+    d1 = -2 * np.sum(y) / N
+    e1 = -2 * X.dot(y) / N
+    return a1, b1, c1, d1, e1
+
+
+def generate_grid(delta=0.025):
+    global W0, W1
+    xg = np.arange(W0 - 5, W0 + 5, delta)
+    yg = np.arange(W1 - 5, W1 + 5, delta)
+    Xg, Yg = np.meshgrid(xg, yg)
+    return Xg, Yg
+
+
+def compute_Z(Xg, Yg, a1, b1, c1, d1, e1):
+    Z = a1 + Xg**2 + b1 * Xg * Yg + c1 * Yg**2 + d1 * Xg + e1 * Yg
+    return Z
+
+
+def lr_gd_draw(w1, filename, Xg, Yg, Z, b, w):
+    global W0, W1
+    w_hist = np.array(w1)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    plt.cla()
+    plt.axis([W0 - 5, W0 + 5, W1 - 5, W1 + 5])
+    plt.tick_params(axis="both", which="major", labelsize=13)
+    CS = plt.contour(Xg, Yg, Z, 100)
+    plt.plot(
+        w_hist[:, 0],
+        w_hist[:, 1],
+        marker="o",
+        color="r",
+        linestyle="-",
+        markeredgecolor="k",
+    )
+    plt.plot(b, w, "go")
+    plt.plot(w_hist[0, 0], w_hist[0, 1], "bo")
+    str0 = f"{w_hist.shape[0]} iterations | W0 = {W0}, W1 = {W1} |f^(x) = {w1[-1][0][0]:.3f} + {w1[-1][1][0]:.3f}x"
+    plt.title(str0)
+    plt.savefig(filename)
+    plt.show()
+
+
+def visualize_GD_process(w1, X, y, b, w):
+    a1, b1, c1, d1, e1 = compute_ellipse_params(X, y)
+    Xg, Yg = generate_grid()
+    Z = compute_Z(Xg, Yg, a1, b1, c1, d1, e1)
+
+    lr_gd_draw(w1, PDF_FILE_NAME + ".pdf", Xg, Yg, Z, b, w)
+
+
 def main():
     global X, y, NOISE
     # Visualize sample data points
@@ -173,8 +233,10 @@ def main():
 
     # 2. Calculate weights after each iteration
     w1 = iterateGD(grad, INITIAL_W, LEARNING_RATE, Xbar, y)
+    print(f"GD soluiton: f^(x) = {w1[-1][0][0]:.3f} + {w1[-1][1][0]:.3f}x")
 
     # 3. Visualize the process of GD
+    visualize_GD_process(w1, X, y, b, w)
 
 
 if __name__ == "__main__":
