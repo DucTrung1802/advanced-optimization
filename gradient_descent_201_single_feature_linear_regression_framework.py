@@ -63,8 +63,9 @@ class LinearModel:
 # CORE FUNCTIONS
 
 
-def cost(w: np.float64, Xbar: np.ndarray, y: np.ndarray):
-    # w has included the bias
+def cost(w: np.ndarray, Xbar: np.ndarray, y: np.ndarray):
+    # w is a vector that included the bias
+    w = w.reshape(-1, 1)
     N = Xbar.shape[1]
     return (
         0.5 / N * np.linalg.norm(y.reshape(-1, 1) - Xbar.T.dot(w).reshape(-1, 1)) ** 2
@@ -72,7 +73,8 @@ def cost(w: np.float64, Xbar: np.ndarray, y: np.ndarray):
 
 
 def grad(w: np.float64, Xbar: np.ndarray, y: np.ndarray):
-    # w has included the bias
+    # w is a vector that included the bias
+    w = w.reshape(-1, 1)
     N = Xbar.shape[1]
     return 1 / N * Xbar.dot(Xbar.T.dot(w).reshape(-1, 1) - y.reshape(-1, 1))
 
@@ -103,11 +105,13 @@ def check_grad(fn, gr, X, Xbar, y):
     print("Difference between two methods should be small:", diff)
 
 
-def iterateGD(grad, w0, learning_rate):
+def iterateGD(grad, w0, learning_rate, Xbar, y):
+    # w0 is a vector that included the bias
+    w0 = w0.reshape(-1, 1)
     w = [w0]
     for it in range(100):
-        w_new = w[-1] - learning_rate * grad(w[-1])
-        if np.linalg.norm(grad(w_new)) / np.array(w0).size < 1e-3:
+        w_new = w[-1] - learning_rate * grad(w[-1], Xbar, y)
+        if np.linalg.norm(grad(w_new, Xbar, y)) / np.array(w0).size < 1e-3:
             break
         w.append(w_new)
     return w
@@ -168,9 +172,9 @@ def main():
     check_grad(cost, grad, np.random.randn(2), Xbar, y)
 
     # 2. Calculate weights after each iteration
-    w1 = iterateGD(grad, INITIAL_W, LEARNING_RATE)
+    w1 = iterateGD(grad, INITIAL_W, LEARNING_RATE, Xbar, y)
 
-    print(w1)
+    # 3. Visualize the process of GD
 
 
 if __name__ == "__main__":
