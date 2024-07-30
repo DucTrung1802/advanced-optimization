@@ -30,6 +30,8 @@ w1 = 3
 
 # SET UP GRADIENT DESCENT PARAMETERS
 
+INITIAL_W = np.array([2, 1])
+LEARNING_RATE = 1
 
 # =====================================================================
 
@@ -101,6 +103,16 @@ def check_grad(fn, gr, X, Xbar, y):
     print("Difference between two methods should be small:", diff)
 
 
+def iterateGD(grad, w0, learning_rate):
+    w = [w0]
+    for it in range(100):
+        w_new = w[-1] - learning_rate * grad(w[-1])
+        if np.linalg.norm(grad(w_new)) / np.array(w0).size < 1e-3:
+            break
+        w.append(w_new)
+    return w
+
+
 def visualize(X, y, model: LinearModel = None, label=None):
     plt.scatter(X, y, color="black", label="Data points")
 
@@ -151,8 +163,14 @@ def main():
     visualize(X, y, sklearn_model, "sklearn LR model")
 
     # Find solution using GD
-    # 1. Check gradient
+
+    # 1. Check numerical gradient
     check_grad(cost, grad, np.random.randn(2), Xbar, y)
+
+    # 2. Calculate weights after each iteration
+    w1 = iterateGD(grad, INITIAL_W, LEARNING_RATE)
+
+    print(w1)
 
 
 if __name__ == "__main__":
