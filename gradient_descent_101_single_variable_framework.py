@@ -48,13 +48,13 @@ GRAPH_START_X = -10
 GRAPH_END_X = 10
 GRAPH_BINS = 400
 
-GIF_NAME = "animation_101"
+GIF_NAME = f"animation_101_lr_{LEARNING_RATE}"
 FPS = 5
 
 # CORE FUNCTIONS
 
 
-def iterateGD(x0=0, eta=0.01, max_iter=1000, tolerance=1e-3, grad_clip=1e3):
+def iterateGD(x0=0, eta=0.01, max_iter=200, tolerance=1e-3, grad_clip=1e3):
     x = [x0]
     for iter in range(max_iter):
         g = grad(x[-1])
