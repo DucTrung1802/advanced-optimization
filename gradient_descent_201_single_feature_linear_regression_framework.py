@@ -110,11 +110,18 @@ def check_grad(fn, gr, X, Xbar, y):
     print("Difference between two methods should be small:", diff)
 
 
-def iterateGD(grad, w0, learning_rate, Xbar, y):
+def iterateGD(
+    grad,
+    w0: np.ndarray,
+    learning_rate: np.float64,
+    Xbar: np.ndarray,
+    y: np.ndarray,
+    max_epochs=100,
+):
     # w0 is a vector that included the bias
     w0 = w0.reshape(-1, 1)
     w = [w0]
-    for it in range(100):
+    for it in range(max_epochs):
         w_new = w[-1] - learning_rate * grad(w[-1], Xbar, y)
         if np.linalg.norm(grad(w_new, Xbar, y)) / np.array(w0).size < 1e-3:
             break
@@ -229,7 +236,7 @@ def main():
     # Find solution using GD
 
     # 1. Check numerical gradient
-    check_grad(cost, grad, np.random.randn(2), Xbar, y)
+    check_grad(cost, grad, np.random.randn(Xbar.shape[0]), Xbar, y)
 
     # 2. Calculate weights after each iteration
     w1 = iterateGD(grad, INITIAL_W, LEARNING_RATE, Xbar, y)
