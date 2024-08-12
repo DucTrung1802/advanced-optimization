@@ -54,18 +54,16 @@ FPS = 5
 # CORE FUNCTIONS
 
 
-def iterateGD(x0=0, eta=0.01, max_iter=200, tolerance=1e-3, grad_clip=1e3):
-    x = [x0]
+def iterateGD(w0=0, eta=0.01, max_iter=200, tolerance=1e-3):
+    w = [w0]
     for iter in range(max_iter):
-        g = grad(x[-1])
-        if np.abs(g) > grad_clip:
-            g = np.sign(g) * grad_clip  # Clip gradient to avoid overflow
-        xNew = x[-1] - eta * g
+        g = grad(w[-1])
+        wNew = w[-1] - eta * g
         if abs(g) < tolerance:
-            x.append(xNew)
+            w.append(wNew)
             break
-        x.append(xNew)
-    return x, iter + 1
+        w.append(wNew)
+    return w, iter + 1
 
 
 def plotFunctionAndPath(x, y, x_path, gif_file_name="animation_101", fps=5):
@@ -135,7 +133,7 @@ def plotFunctionAndPath(x, y, x_path, gif_file_name="animation_101", fps=5):
         interval=200,
     )
 
-    ax.set_xlabel("x")
+    ax.set_xlabel("w")
     ax.set_ylabel("f(x)")
     ax.legend(loc="best")
     plt.title("Gradient Descent Optimization")
