@@ -1,0 +1,104 @@
+Random state: 0
+Log Loss: 0.185482
+F1 Score: 0.932138
+Runtime (s): 0.145151
+
+Random state: 5
+Log Loss: 0.159450
+F1 Score: 0.941489
+Runtime (s): 0.136236
+
+Random state: 10
+Log Loss: 0.184389
+F1 Score: 0.931164
+Runtime (s): 0.078979
+
+Random state: 15
+Log Loss: 0.171586
+F1 Score: 0.925620
+Runtime (s): 0.098198
+
+Random state: 20
+Log Loss: 0.169379
+F1 Score: 0.947507
+Runtime (s): 0.109155
+
+Random state: 25
+Log Loss: 0.200841
+F1 Score: 0.914432
+Runtime (s): 0.091817
+
+Random state: 30
+Log Loss: 0.198512
+F1 Score: 0.913386
+Runtime (s): 0.126064
+
+Random state: 35
+Log Loss: 0.162260
+F1 Score: 0.944737
+Runtime (s): 0.118033
+
+Random state: 40
+Log Loss: 0.193150
+F1 Score: 0.924870
+Runtime (s): 0.127521
+
+Random state: 45
+Log Loss: 0.229182
+F1 Score: 0.897196
+Runtime (s): 0.088205
+
+Random state: 50
+Log Loss: 0.213370
+F1 Score: 0.900256
+Runtime (s): 0.095940
+
+Random state: 55
+Log Loss: 0.168529
+F1 Score: 0.934531
+Runtime (s): 0.127883
+
+Random state: 60
+Log Loss: 0.189148
+F1 Score: 0.917483
+Runtime (s): 0.080406
+
+Random state: 65
+Log Loss: 0.228273
+F1 Score: 0.903870
+Runtime (s): 0.091883
+
+Random state: 70
+Log Loss: 0.173086
+F1 Score: 0.928382
+Runtime (s): 0.112674
+
+Random state: 75
+Log Loss: 0.167825
+F1 Score: 0.941935
+Runtime (s): 0.089784
+
+Random state: 80
+Log Loss: 0.156105
+F1 Score: 0.947233
+Runtime (s): 0.123044
+
+Random state: 85
+Log Loss: 0.170081
+F1 Score: 0.947368
+Runtime (s): 0.117901
+
+Random state: 90
+Log Loss: 0.178069
+F1 Score: 0.937500
+Runtime (s): 0.130814
+
+Random state: 95
+Log Loss: 0.169778
+F1 Score: 0.932468
+Runtime (s): 0.096970
+
+Number of random state: 20
+AVG Log Loss: 0.183425
+AVG F1 Score: 0.928178
+AVG Runtime (s): 0.109333
